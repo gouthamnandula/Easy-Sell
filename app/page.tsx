@@ -1,29 +1,37 @@
 import Card from "@/components/card";
 import { createClient } from "@/supabase/client";
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
 
-export const revalidate = 3600; //revalidate the page every 1 hour, this is a feature of next.js that allows us to cache the page for a certain amount of time and then revalidate it after that time has passed, this is useful for pages that have dynamic content that changes frequently, like our products page, so we don't have to fetch the data from the database every time the page is loaded, we can just cache it and then revalidate it after a certain amount of time has passed. This will improve the performance of our page and reduce the load on our database.
+export const revalidate = 3600;
 
 export default async function Home() {
-  const supabase = createClient() //instance of supabase client
+  const supabase = createClient();
 
   const { data: topProducts, error: topProductsError } = await supabase
     .from('easysell-products')
-    .select() //select all columns from the table
-    .eq('boost', true) //filter the products that are boosted, this will return only the products that have the boost column set to true
+    .select()
+    .eq('boost', true);
 
-  //here supabase is using fetch api internally and used force caching automatically.
-  const { data: products, error } = await supabase.from('easysell-products').select() //name of the table in supabase
+  if (topProductsError) {
+    throw new Error(`Failed to load featured products: ${topProductsError.message}`);
+  }
+
+  const { data: products, error: productsError } = await supabase
+    .from('easysell-products')
+    .select();
+
+  if (productsError) {
+    throw new Error(`Failed to load products: ${productsError.message}`);
+  }
 
   if (!topProducts) {
-    return (
-      notFound()
-    )
+    return notFound();
   }
 
   if (!products) {
-    return notFound()
+    return notFound();
   }
+
   return (
     <main className="min-h-screen max-w-[100rem] mx-auto">
       <div className="px-20 pt-12 pb-20 text-gray-400">

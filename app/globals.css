@@ -17,7 +17,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-sans: "Nunito", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-heading: "Josefin Sans", "Trebuchet MS", "Segoe UI", sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
@@ -39,4 +40,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+.heading-font {
+  font-family: var(--font-heading);
 }

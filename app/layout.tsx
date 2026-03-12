@@ -1,20 +1,8 @@
 import type { Metadata } from "next";
-import { Nunito, Josefin_Sans } from "next/font/google";
 import { getCanonicalUrl } from "@/utils";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-});
-
-const josefinSans = Josefin_Sans({
-  variable: "--font-josefin-sans",
-  subsets: ["latin"],
-});
-
 
 export const metadata: Metadata = {  //this is a special export that next.js uses to set the metadata of the page, this is a feature of next.js that allows us to set the metadata of the page in a simple way, we can set the title, description, keywords, etc. of the page using this export, and next.js will automatically add the appropriate meta tags to the head of the page.
   metadataBase: new URL(getCanonicalUrl()),
@@ -32,14 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${nunito.className}`}
-      >
-        <Header font={josefinSans.className} />
+      <body>
+        <Header />
         <div className="bg-gray-951 min-h-screen py-12">  
           {children}
         </div>
-        <Footer font={josefinSans.className}/>
+        <Footer />
       </body>
     </html>
   );
