@@ -3,7 +3,20 @@ import { useActionState } from 'react';
 import { sellYourItemAction } from '@/actions';
 import SubmitButton from '@/components/submit-button'; //because it is using client we need to write our metadata by craeting another layout.tsx file and then we can use that layout to set the metadata for this page, because if we set the metadata in this page it will not work because this page is using client and metadata is only supported in server components, so we need to create a layout for this page and then set the metadata in that layout, and then we can use that layout in this page to set the metadata for this page, this is a workaround for the limitation of next.js that metadata is only supported in server components, but with this workaround we can still set the metadata for our client component pages.
 
-const initialState = {
+type UploadFormState = {
+  type?: 'error' | 'success';
+  message: string;
+  errors: {
+    name?: string[];
+    price?: string[];
+    description?: string[];
+    imageUrl?: string[];
+    contactEmail?: string[];
+  } | null;
+};
+
+const initialState: UploadFormState = {
+  type: undefined,
   message: '',
   errors: null,
 };

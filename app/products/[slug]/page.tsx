@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { notFound } from 'next/navigation';
-import { getCanonicalUrl, getImageUrl } from '@/utils';
+import { getImageUrl } from '@/utils';
 
 type Props = {
     params: Promise<{ //next js updated params rules, now we have to use promise to get the params, this is a new feature of next js that allows us to use async/await to get the params, this is useful for cases when we need to fetch data from the database based on the params, so we can use async/await to fetch the data and then return the page with the fetched data, this will improve the performance of our page and reduce the load on our database because we are not fetching the data from the database every time the page is loaded, we are just fetching the data when we need it based on the params.
@@ -45,19 +45,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const imageSrc = getImageUrl(data.imageUrl);
-    const productUrl = `${getCanonicalUrl()}/products/${data.id}`;
+    const productPath = `/products/${data.id}`;
     const description = data.description.slice(0, 160);
 
     return {
         title: `${data.name} | Easy Sell`,
         description,
         alternates: {
-            canonical: productUrl,
+            canonical: productPath,
         },
         openGraph: {
             title: data.name,
             description,
-            url: productUrl,
+            url: productPath,
             siteName: 'Easy Sell',
             type: 'website',
             images: [

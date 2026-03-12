@@ -1,18 +1,14 @@
 import type { Metadata } from 'next';
-import { getCanonicalUrl } from '@/utils';
-
-const uploadPageUrl = `${getCanonicalUrl()}/products/upload`;
-
 export const metadata: Metadata = {
   title: 'Upload Product | Easy Sell',
   description: 'Add your product to Easy Sell with images, pricing, and contact details.',
   alternates: {
-    canonical: uploadPageUrl,
+    canonical: '/products/upload',
   },
   openGraph: {
     title: 'Upload Product | Easy Sell',
     description: 'Add your product to Easy Sell with images, pricing, and contact details.',
-    url: uploadPageUrl,
+    url: '/products/upload',
     siteName: 'Easy Sell',
     type: 'website',
   },
