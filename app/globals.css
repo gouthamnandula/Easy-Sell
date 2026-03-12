@@ -8,11 +8,7 @@
     font-weight: 400;
     font-style: normal;
   }
-
-  @h1 {
-    @apply text-4xl font-bold;
-  }
-
+  
   @font-face {
     font-family: "Geist Mono";
     src: url("/fonts/GeistMono-Regular.woff2") format("woff2"),

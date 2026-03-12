@@ -1,58 +1,63 @@
 import Card from "@/components/card";
 import { createClient } from "@/supabase/client";
+import { notFound } from 'next/navigation'
+
+export const revalidate = 3600; //revalidate the page every 1 hour, this is a feature of next.js that allows us to cache the page for a certain amount of time and then revalidate it after that time has passed, this is useful for pages that have dynamic content that changes frequently, like our products page, so we don't have to fetch the data from the database every time the page is loaded, we can just cache it and then revalidate it after a certain amount of time has passed. This will improve the performance of our page and reduce the load on our database.
 
 export default async function Home() {
   const supabase = createClient() //instance of supabase client
-  //here supabase is using fetch api internally to make a request to the supabase backend and fetch data from the 'easysell-products' table
-  const { data: products, error } = await supabase.from('easysell-products').select() //name of the table in supabase 
-  if(!products) {
+
+  const { data: topProducts, error: topProductsError } = await supabase
+    .from('easysell-products')
+    .select() //select all columns from the table
+    .eq('boost', true) //filter the products that are boosted, this will return only the products that have the boost column set to true
+
+  //here supabase is using fetch api internally and used force caching automatically.
+  const { data: products, error } = await supabase.from('easysell-products').select() //name of the table in supabase
+
+  if (!topProducts) {
     return (
-      <p>No products found</p>
+      notFound()
     )
   }
-  // const products = [
-  //   {
-  //     id:0,
-  //     name: "Mushroom Lamp Orange",
-  //     description: "Mushroom Lamp Orange - A charming and whimsical lighting fixture that adds a touch of playfulness to any space. This lamp features a mushroom-shaped design with a vibrant orange color, creating a warm and inviting ambiance. Perfect for bedrooms, living rooms, or as a unique accent piece in your home decor.",
-  //     price: 49.99,
-  //     imageUrl: "https://res.cloudinary.com/dkfnd7xy7/image/upload/v1708550271/Mushroom-Lamp-Orange-Lamp-Mushroom-Table-Lamp-Mid-Century-Modern-Style-Home-Decor_45568e91-86a0-4946-baeb-8cf9b0c54adc.ba8ddaa42de9ecc79d5046b14a59d84a_czhvfy.webp",
-  //   },
-  // ]
-  return (
-      <main className="min-h-screen">
-        <div className="px-12 pt-12 pb-20 text-gray-400">
-          <div className="flex flex-col xl:flex-row gap-2 xl:gap-40">
-            <div className="pt-12">
-              <h2 className="text-4xl mb-16">OUR TOP PRODUCTS</h2>
-              <p className="text-xl">
-                You can pay to boost your products here.
-              </p>
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-12">
-              {
-                products.map((product) => (
-                  <Card key={`${product.name}-${product.id}`}
-                   {... product} //this is called spread operator, it will spread the properties of the product object as props to the Card component, so we don't have to write name={product.name} description={product.description} price={product.price} imageUrl={product.imageUrl} instead we can just spread the product object and it will automatically pass the properties as props to the Card component
-                   />
-                ))
-              }
-            </div>
+  if (!products) {
+    return notFound()
+  }
+  return (
+    <main className="min-h-screen max-w-[100rem] mx-auto">
+      <div className="px-20 pt-12 pb-20 text-gray-400">
+        <div className="flex flex-col xl:flex-row gap-2 xl:gap-40">
+          <div className="pt-12">
+            <h2 className="text-4xl mb-16">OUR TOP PRODUCTS</h2>
+            <p className="text-xl">
+              You can pay to boost your products here.
+            </p>
           </div>
 
-          <h2 className="text-4xl mt-20 mb-16">ALL PRODUCTS</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-12">
             {
-                products.map((product) => (
-                  <Card key={`${product.name}-${product.id}`}
-                   {... product}
-                   />
-                ))
-              }
+              topProducts.map((product) => (
+                <Card key={`${product.name}-${product.id}`}
+                  {...product} //this is called spread operator, it will spread the properties of the product object as props to the Card component, so we don't have to write name={product.name} description={product.description} price={product.price} imageUrl={product.imageUrl} instead we can just spread the product object and it will automatically pass the properties as props to the Card component
+                />
+              ))
+            }
           </div>
         </div>
-      </main>
+
+        <h2 className="text-4xl mt-20 mb-16">ALL PRODUCTS</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {
+            products.map((product) => (
+              <Card key={`${product.name}-${product.id}`}
+                {...product}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </main>
   );
 }
