@@ -33,7 +33,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-screen max-w-[100rem] mx-auto">
+    <main className="min-h-screen max-w-400 mx-auto">
       <div className="px-20 pt-12 pb-20 text-gray-400">
         <div className="flex flex-col xl:flex-row gap-2 xl:gap-40">
           <div className="pt-12">

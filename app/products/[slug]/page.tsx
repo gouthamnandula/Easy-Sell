@@ -114,7 +114,7 @@ export default async function page({ params }: Props) {
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 mb-4">
             <div className="flex items-center justify-center bg-white-100 shadow-xl">
                 <Image
-                className="rounded-lg shadow-xl border-4 border-gray-200 p-2 lg:min-w-[40rem] lg:min-h-[30rem]"
+                className="rounded-lg shadow-xl border-4 border-gray-200 p-2 lg:min-w-160 lg:min-h-120"
                 width={600}
                 height={600}
                 alt={data.name}
